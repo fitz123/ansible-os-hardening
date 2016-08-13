@@ -44,7 +44,7 @@ It will not:
 | `os_auth_allow_homeless`| false | true if to allow users without home to login|
 | `os_auth_pam_passwdqc_enable`| true | true if you want to use strong password checking in PAM using passwdqc|
 | `os_auth_pam_passwdqc_options`| "min=disabled,disabled,16,12,8" | set to any option line (as a string) that you want to pass to passwdqc|
-| `os_security_users_allow`| [] | list of things, that a user is allowed to do. May contain` `change_user`
+| `os_security_users_allow`| [] | list of things, that a user is allowed to do. May contain `change_user`.
 | `os_security_kernel_enable_module_loading`| true | true if you want to allowed to change kernel modules once the system is running (eg `modprobe`, `rmmod`)|
 | `os_security_kernel_enable_sysrq`| false | sysrq is a 'magical' key combo you can hit which the kernel will respond to regardless of whatever else it is doing, unless it is completely locked up. |
 | `os_security_kernel_enable_core_dump`| false | kernel is crashing or otherwise misbehaving and a kernel core dump is created |
@@ -137,7 +137,9 @@ Alternatively you can change Ansible's [hash-behaviour](https://docs.ansible.com
 
 ## Local Testing
 
-For local testing you can use vagrant and Virtualbox of VMWare to run tests locally. You will have to install Virtualbox and Vagrant on your system. See [Vagrant Downloads](http://downloads.vagrantup.com/) for a vagrant package suitable for your system. For all our tests we use `test-kitchen`. If you are not familiar with `test-kitchen` please have a look at [their guide](http://kitchen.ci/docs/getting-started).
+The preferred way of locally testing the role is to use Docker. You will have to install Docker on your system. See [Get started](https://docs.docker.com/) for a Docker package suitable to for your system.
+
+You can also use vagrant and Virtualbox or VMWare to run tests locally. You will have to install Virtualbox and Vagrant on your system. See [Vagrant Downloads](http://downloads.vagrantup.com/) for a vagrant package suitable for your system. For all our tests we use `test-kitchen`. If you are not familiar with `test-kitchen` please have a look at [their guide](http://kitchen.ci/docs/getting-started).
 
 Next install test-kitchen:
 
@@ -145,10 +147,10 @@ Next install test-kitchen:
 # Install dependencies
 gem install bundler
 bundle install
+```
 
-# Fetch tests
-bundle exec thor kitchen:fetch-remote-tests
-
+### Testing with Docker
+```
 # fast test on one machine
 bundle exec kitchen test default-ubuntu-1204
 
@@ -160,8 +162,19 @@ bundle exec kitchen create default-ubuntu-1204
 bundle exec kitchen converge default-ubuntu-1204
 ```
 
-For more information see [test-kitchen](http://kitchen.ci/docs/getting-started)
+### Testing with Virtualbox
+```
+# fast test on one machine
+KITCHEN_YAML=".kitchen.vagrant.yml" bundle exec kitchen test default-ubuntu-1204
 
+# test on all machines
+KITCHEN_YAML=".kitchen.vagrant.yml" bundle exec kitchen test
+
+# for development
+KITCHEN_YAML=".kitchen.vagrant.yml" bundle exec kitchen create default-ubuntu-1204
+KITCHEN_YAML=".kitchen.vagrant.yml" bundle exec kitchen converge default-ubuntu-1204
+```
+For more information see [test-kitchen](http://kitchen.ci/docs/getting-started)
 
 ## Contributors + Kudos
 
@@ -198,4 +211,4 @@ limitations under the License.
 
 [1]: http://travis-ci.org/dev-sec/ansible-os-hardening
 [2]: https://gitter.im/dev-sec/general
-[3]: https://galaxy.ansible.com/list#/roles/4248
+[3]: https://galaxy.ansible.com/dev-sec/os-hardening
